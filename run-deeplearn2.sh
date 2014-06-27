@@ -12,11 +12,15 @@
 # For more informaiton regarding the recipes and results, visit our webiste
 # http://www.cs.cmu.edu/~ymiao/kaldipdnn
 
+# This is for "pairwise" models
+
 working_dir=exp_deeplearn/spn2
 pre_working_dir=`pwd`/exp_deeplearn/spn
 delete_pfile=false # whether to delete pfiles after CNN training
 deeplearn_path=$HOME/experiments/bin/deeplearn
-model_files=$HOME/kaldiPDNN/kaldi-trunk/egs/timit/s5/kaldi-deeplearn/models/cp_%d_%d/model_BEST.fnn
+trained_cp_dir=$HOME/experiments/timit_conv_pairwise/cp
+model_dir=$HOME/kaldiPDNN/kaldi-trunk/egs/timit/s5/kaldi-deeplearn/models
+model_files=$model_dir/cp_%d_%d/model_BEST.fnn
 export LD_LIBRARY_PATH=/usr/local/cuda-5.5/lib64:$LD_LIBRARY_PATH   # libraries (CUDA, boost, protobuf)
 
 gmmdir=exp/tri3
@@ -55,6 +59,15 @@ if ! nvidia-smi; then
 fi
 
 pythonCMD=python
+
+if [ ! -d $model_dir ]; then
+    echo "Creating symbolic links to the trained model in $trained_cp_dir."
+    echo "The links are put in $model_dir"
+    mkdir $model_dir
+    PYTHONPATH=$PYTHONPATH:`pwd`/kaldi-deeplearn/ \
+        $pythonCMD kaldi-deeplearn/createModelLinks.py \
+                 $model_dir $trained_cp_dir timit_conv_pairwise_train_BEST.fnn || exit 1;
+fi
 
 mkdir -p $working_dir/log
 
