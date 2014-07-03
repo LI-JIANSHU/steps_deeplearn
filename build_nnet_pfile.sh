@@ -103,13 +103,13 @@ if [ $stage -le 3 ] && $do_split; then
   mkdir -p $dir/concat
   # Chop the whole pfile into small units
   $cmd $dir/log/pfile_burst.log \
-    perl steps_pdnn/pfile_burst.pl -i $dir/concat.pfile -o $dir/concat -s $pfile_unit_size || exit 1;
+    perl steps_deeplearn/pfile_burst.pl -i $dir/concat.pfile -o $dir/concat -s $pfile_unit_size || exit 1;
 fi
 
 if [ $stage -le 4 ] && $do_split; then
   # Split the units accoring to cv_ratio
   $cmd $dir/log/pfile_rconcat.log \
-    perl steps_pdnn/pfile_rconcat.pl -t "$dir" -o $dir/valid.pfile,${cv_ratio} -o $dir/train.pfile $dir/concat/*.pfile || exit 1;
+    perl steps_deeplearn/pfile_rconcat.pl -t "$dir" -o $dir/valid.pfile,${cv_ratio} -o $dir/train.pfile $dir/concat/*.pfile || exit 1;
   rm -r $dir/concat
   echo "## Info of the training pfile: ##"
   $PPATH/pfile_info $dir/train.pfile
