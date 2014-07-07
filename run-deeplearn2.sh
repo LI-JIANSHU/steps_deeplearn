@@ -14,6 +14,9 @@
 
 # This is for "pairwise" models
 
+################################################################################
+# Change those variables to match your setup
+
 working_dir=exp_deeplearn/spn2
 pre_working_dir=`pwd`/exp_deeplearn/spn
 delete_pfile=false # whether to delete pfiles after CNN training
@@ -22,6 +25,9 @@ trained_cp_dir=$HOME/experiments/timit_conv_pairwise/cp
 model_dir=$HOME/kaldiPDNN/kaldi-trunk/egs/timit/s5/kaldi-deeplearn/models
 model_files=$model_dir/cp_%d_%d/model_BEST.fnn
 export LD_LIBRARY_PATH=/usr/local/cuda-5.5/lib64:$LD_LIBRARY_PATH   # libraries (CUDA, boost, protobuf)
+
+# end of changeable stuffs
+################################################################################
 
 gmmdir=exp/tri3
 

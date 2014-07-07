@@ -16,6 +16,7 @@ working_dir=exp_deeplearn/spn
 delete_pfile=false # whether to delete pfiles after CNN training
 deeplearn_path=$HOME/experiments/bin/deeplearn
 export LD_LIBRARY_PATH=/usr/local/cuda-5.5/lib64:$LD_LIBRARY_PATH   # libraries (CUDA, boost, protobuf)
+gpu_mem_limit=3     # available GPU memory used for the dataset, in GB. Should be 1GB less than the total GPU memory
 
 gmmdir=exp/tri3
 
@@ -49,10 +50,9 @@ fi
 
 if ! nvidia-smi; then
   echo "The command nvidia-smi was not found: this probably means you don't have a GPU."
-  echo "(Note: this script might still work, it would just be slower.)"
+  exit 1;
 fi
 
-# The hope here is that Theano has been installed either to python or to python2.6
 pythonCMD=python
 
 mkdir -p $working_dir/log
@@ -114,7 +114,8 @@ if [ ! -f $working_dir/spn.fine.done ]; then
                           --wdir $working_dir \
                           --output-file $working_dir/spn_conv.fnn \
                           --weight-output-file $working_dir/dnn.nnet \
-                          --deeplearn-path $deeplearn_path || exit 1;
+                          --deeplearn-path $deeplearn_path
+                          --gpu-mem $gpu_mem_limit || exit 1;
   touch $working_dir/spn.fine.done
   $delete_pfile && rm -rf $working_dir/*.pfile
 fi
