@@ -114,7 +114,7 @@ if [ ! -f $working_dir/spn.fine.done ]; then
                           --wdir $working_dir \
                           --output-file $working_dir/spn_conv.fnn \
                           --weight-output-file $working_dir/dnn.nnet \
-                          --deeplearn-path $deeplearn_path
+                          --deeplearn-path $deeplearn_path \
                           --gpu-mem $gpu_mem_limit || exit 1;
   touch $working_dir/spn.fine.done
   $delete_pfile && rm -rf $working_dir/*.pfile
@@ -182,6 +182,5 @@ fi
 echo ---------------------------------------------------------------------
 echo "Finished decoding. Computing WER"
 echo ---------------------------------------------------------------------
-for x in $working_dir/decode*; do
- [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh
-done
+for x in $working_dir/decode*; do [ -d $x ] && echo $x | grep "${1:-.*}" >/dev/null && grep WER $x/wer_* 2>/dev/null | utils/best_wer.sh; done
+for x in $working_dir/decode*; do [ -d $x ] && echo $x | grep "${1:-.*}" >/dev/null && grep Sum $x/score_*/*.sys 2>/dev/null | utils/best_wer.sh; done
