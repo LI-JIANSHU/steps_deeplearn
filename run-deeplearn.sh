@@ -125,9 +125,11 @@ fi
 echo "Dump convolution activations on dev and test"
 mkdir -p $working_dir/data_conv
 for set in dev test; do
-  cp -r $working_dir/data/$set $working_dir/data_conv/$set
-  ( cd $working_dir/data_conv/$set; rm -rf {cmvn,feats}.scp split*; )
-
+  if [ ! -f $working_dir/conv.feat.$set.done ]; then
+    cp -r $working_dir/data/$set $working_dir/data_conv/$set
+    ( cd $working_dir/data_conv/$set; rm -rf {cmvn,feats}.scp split*; )
+  fi
+  
   if [ ! -f $working_dir/txt.feat.$set.done ]; then
     echo "Txt format of fbank features on $set"
     # generate the txt format of fbank features
