@@ -141,8 +141,8 @@ if [ ! -f $working_dir/spn.fine.done ]; then
   $cmd $working_dir/log/spn.fine.log \
     export PYTHONPATH=$PYTHONPATH:`pwd`/kaldi-deeplearn/ \; \
     $pythonCMD kaldi-deeplearn/train_spn_swbd.py \
-                          --train-data "big_folder/train.pfile" \
-                          --valid-data "big_folder/valid.pfile" \
+                          --train-data "$working_dir/train.pfile" \
+                          --valid-data "$working_dir/valid.pfile" \
                           --num-outputs "$num_pdfs" \
                           --wdir $working_dir \
                           --output-file $working_dir/spn_conv.fnn \
