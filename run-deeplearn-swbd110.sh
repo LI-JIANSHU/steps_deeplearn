@@ -41,13 +41,12 @@ cmd=run.pl
 # somewhere with a lot of space, preferably on the local GPU-containing machine.
 if [ ! -d kaldi-deeplearn ]; then
   echo "Checking out kaldi-deeplearn code."
-  git clone https://github.com/phvu/kaldi-deeplearn.git
+  git clone https://github.com/LI-JIANSHU/kaldi-deeplearn.git
 fi
 
 if [ ! -d steps_deeplearn ]; then
   echo "Checking out steps_deeplearn scripts."
-  exit 1;
-  git clone https://github.com/phvu/steps_deeplearn.git
+  git clone https://github.com/LI-JIANSHU/steps_deeplearn.git
 fi
 
 if ! nvidia-smi; then
