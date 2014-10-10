@@ -225,7 +225,8 @@ echo Finished at `date`
 
 
 echo Doing more decoding...
-lm_list=`ls exp_deeplearn/spn_tri4a | grep "decode_eval2000_" | sed -e 's:decode_eval2000_::'`
+#lm_list=`ls exp_deeplearn/spn_tri4a | grep "decode_eval2000_" | sed -e 's:decode_eval2000_::'`
+lm_list=`cat lm_decode_list`
 for lm in $lm_list; do
 if [ ! -f  $working_dir/decode.done_$lm ]; then
   echo "decoding $lm ..."
