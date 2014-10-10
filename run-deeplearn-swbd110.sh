@@ -214,7 +214,7 @@ if [ ! -f  $working_dir/decode.done_$lm ]; then
   # Decode
 set=eval2000
   steps_deeplearn/decode_dnn.sh --nj 40 --scoring-opts "--min-lmwt 7 --max-lmwt 18" --cmd "$decode_cmd" --norm-vars false \
-    $graph_dir $working_dir/data_conv/$set ${gmmdir}_ali_100k_nodup $working_dir/decode_$set_$lm || exit 1;
+    $graph_dir $working_dir/data_conv/$set ${gmmdir}_ali_100k_nodup $working_dir/decode_${set}_${lm} || exit 1;
 
   touch $working_dir/decode.done_$lm
   echo "$working_dir/decode.done_$lm is created"
