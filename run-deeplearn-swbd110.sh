@@ -157,46 +157,46 @@ fi
 
 echo "Dump convolution activations on eval2000"
 mkdir -p $working_dir/data_conv
-for set in eval2000; do
-  if [ ! -f $working_dir/conv.feat.$set.done ]; then
-    cp -r $working_dir/data/$set $working_dir/data_conv/$set
-    ( cd $working_dir/data_conv/$set; rm -rf {cmvn,feats}.scp split*; )
+
+  if [ ! -f $working_dir/conv.feat.eval2000.done ]; then
+    cp -r $working_dir/data/eval2000 $working_dir/data_conv/eval2000
+    ( cd $working_dir/data_conv/eval2000; rm -rf {cmvn,feats}.scp split*; )
   fi
   
-  if [ ! -f $working_dir/txt.feat.$set.done ]; then
-    echo "Txt format of fbank features on $set"
+  if [ ! -f $working_dir/txt.feat.eval2000.done ]; then
+    echo "Txt format of fbank features on eval2000"
     # generate the txt format of fbank features
     steps_deeplearn/generate_txt_fbank.sh --cmd "$train_cmd"  \
       --input_splice_opts "$splice_opts" --norm-vars true \
-      $working_dir/data/$set $working_dir/_log $working_dir || exit 1;
-    if [ ! -f $working_dir/fbank_txt_${set}.ark ]; then
-      echo "No fbank_txt_${set}.ark was generated" && exit 1;
+      $working_dir/data/eval2000 $working_dir/_log $working_dir || exit 1;
+    if [ ! -f $working_dir/fbank_txt_eval2000.ark ]; then
+      echo "No fbank_txt_eval2000.ark was generated" && exit 1;
     fi
-    touch $working_dir/txt.feat.$set.done
+    touch $working_dir/txt.feat.eval2000.done
   fi
-  if [ ! -f $working_dir/conv.feat.$set.done ]; then
+  if [ ! -f $working_dir/conv.feat.eval2000.done ]; then
     mkdir -p $working_dir/_conv
-    mkdir -p $working_dir/conv_${set}
+    mkdir -p $working_dir/conv_eval2000
     echo "Input txt features to the conv net"
     # Now we switch to GPU.
-    $cmd $working_dir/_log/conv.feat.$set.log \
+    $cmd $working_dir/_log/conv.feat.eval2000.log \
       export PYTHONPATH=$PYTHONPATH:`pwd`/kaldi-deeplearn/ \; \
       $pythonCMD kaldi-deeplearn/eval_spn.py \
-                --ark-file $working_dir/fbank_txt_${set}.ark \
+                --ark-file $working_dir/fbank_txt_eval2000.ark \
                 --model-file $working_dir/spn_conv.fnn \
-                --wdir $working_dir/conv_${set} \
+                --wdir $working_dir/conv_eval2000 \
                 --deeplearn-path $deeplearn_path \
-                --output-file-prefix $working_dir/_conv/conv_$set || exit 1;
-    cp $working_dir/_conv/conv_${set}.scp $working_dir/data_conv/$set/feats.scp
+                --output-file-prefix $working_dir/_conv/conv_eval2000 || exit 1;
+    cp $working_dir/_conv/conv_eval2000.scp $working_dir/data_conv/eval2000/feats.scp
 
     # It's critical to generate "fake" CMVN states here.
     steps/compute_cmvn_stats.sh --fake \
-      $working_dir/data_conv/$set $working_dir/_log $working_dir/_conv || exit 1;  
+      $working_dir/data_conv/eval2000 $working_dir/_log $working_dir/_conv || exit 1;  
  
-    touch $working_dir/conv.feat.$set.done
-    echo "conv.feat.$set.done is created"
+    touch $working_dir/conv.feat.eval2000.done
+    echo "conv.feat.eval2000.done is created"
   fi
-done
+
 
 echo ---------------------------------------------------------------------
 echo "Decoding the final system"
@@ -212,9 +212,8 @@ if [ ! -f  $working_dir/decode.done_$lm ]; then
   # No splicing on conv feats. So we reset the splice_opts
   echo "--left-context=0 --right-context=0" > $working_dir/splice_opts
   # Decode
-set=eval2000
   steps_deeplearn/decode_dnn.sh --nj 40 --scoring-opts "--min-lmwt 7 --max-lmwt 18" --cmd "$decode_cmd" --norm-vars false \
-    $graph_dir $working_dir/data_conv/$set ${gmmdir}_ali_100k_nodup $working_dir/decode_${set}_${lm} || exit 1;
+    $graph_dir $working_dir/data_conv/eval2000 ${gmmdir}_ali_100k_nodup $working_dir/decode_eval2000_${lm} || exit 1;
 
   touch $working_dir/decode.done_$lm
   echo "$working_dir/decode.done_$lm is created"
@@ -235,9 +234,8 @@ if [ ! -f  $working_dir/decode.done_$lm ]; then
   # No splicing on conv feats. So we reset the splice_opts
   echo "--left-context=0 --right-context=0" > $working_dir/splice_opts
   # Decode
-set=eval2000
   steps_deeplearn/decode_dnn.sh --nj 40 --scoring-opts "--min-lmwt 7 --max-lmwt 18" --cmd "$decode_cmd" --norm-vars false \
-    $graph_dir $working_dir/data_conv/$set ${gmmdir}_ali_100k_nodup $working_dir/decode_${set}_${lm} || exit 1;
+    $graph_dir $working_dir/data_conv/eval2000 ${gmmdir}_ali_100k_nodup $working_dir/decode_eval2000_${lm} || exit 1;
 
   touch $working_dir/decode.done_$lm
   echo "$working_dir/decode.done_$lm is created"
