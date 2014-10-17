@@ -1,4 +1,4 @@
-dir=~/spn_initial
+dir=~/spn_initial_lala
 [ -d $dir ] || mkdir $dir
 # for the initial csv files
 cat exp_pdnn_110h/cnn/conv.nnet | grep "W 0" | sort -k3 -n | sed -e 's,^.*:,,' -e 's:"::g' -e 's:,::' -e 's:n: :g' -e 's:\\: :g' -e 's:^ ::' > $dir/input_conv1.data
