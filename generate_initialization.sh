@@ -13,7 +13,7 @@ cat exp_pdnn_110h/cnn/dnn.nnet | head -1026 | tail -1024 > $dir/conv2_h1.data
 cp steps_deeplearn/convert.m $dir/
 echo "Going into $dir to convert data to csv format..."
 ( cd $dir;
-octave convert.m;
+octave --silent convert.m ;
 rm convert.m
 )
 echo Finished at `date`
