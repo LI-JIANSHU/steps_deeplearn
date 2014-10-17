@@ -1,11 +1,14 @@
 #!/bin/bash
 
 # Copyright 2013    Yajie Miao    Carnegie Mellon University
+# Copyright 2014    Li Jianshu    Singapore University of Technology and Design
 # Apache 2.0
 
 # Decode the DNN model. The [srcdir] in this script should be the same as dir in
 # build_nnet_pfile.sh. Also, the DNN model has been trained and put in srcdir.
 # All these steps will be done automatically if you run the recipe file run-dnn.sh
+
+# this script uses dnn.nnet file from a user-specified location 
 
 ## Begin configuration section
 stage=0
