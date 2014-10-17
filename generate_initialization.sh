@@ -14,5 +14,6 @@ cp steps_deeplearn/convert.m $dir/
 echo 'Going into $dir to convert data to csv format...'
 ( cd $dir;
 octave convert.m;
+rm convert.m
 )
 echo Finished at `date`
