@@ -156,10 +156,11 @@ fi
 ##################################################################################
 
 echo "Dump convolution activations on eval2000"
-mkdir -p $working_dir/data_conv
+[ -d $working_dir/data_conv ] || mkdir -p $working_dir/data_conv
 
   if [ ! -f $working_dir/conv.feat.eval2000.done ]; then
-    cp -r $working_dir/data/eval2000 $working_dir/data_conv/eval2000
+    [ -d $working_dir/data_conv/eval2000 ] || mkdir -p $working_dir/data_conv/eval2000
+    cp -r $working_dir/data/eval2000/* $working_dir/data_conv/eval2000/
     ( cd $working_dir/data_conv/eval2000; rm -rf {cmvn,feats}.scp split*; )
   fi
   
@@ -221,11 +222,12 @@ fi
 done
 
 echo Finished at `date`
-
+echo Exit by LJS
+exit 1 
 
 echo Doing more decoding...
 #lm_list=`ls exp_deeplearn/spn_tri4a | grep "decode_eval2000_" | sed -e 's:decode_eval2000_::'`
-lm_list=`cat lm_decode_list`
+#lm_list=`cat lm_decode_list`
 for lm in $lm_list; do
 if [ ! -f  $working_dir/decode.done_$lm ]; then
   echo "decoding $lm ..."
