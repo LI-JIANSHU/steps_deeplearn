@@ -50,7 +50,7 @@ if len!=64
 error("Dimension for conv1 is incorrect")
 endif
 rep=13*13;
-y=zeros(length(x)*rep,1);
+y=zeros(1,length(x)*rep);
 for idx=0:63
  y(idx*rep+1:idx*rep+rep)=x(idx+1)*ones(1,rep);
 endfor
@@ -66,12 +66,12 @@ if len!=128
 error("Dimension for conv2 is incorrect")
 endif
 rep=3*3;
-y=zeros(length(x)*rep,1);
+y=zeros(1,length(x)*rep);
 for idx=0:127
  y(idx*rep+1:idx*rep+rep)=x(idx+1)*ones(1,rep);
 endfor
 printf("Writing .csv ...\n")
-dlmwrite('conv1_bias.csv',y);
+dlmwrite('conv2_bias.csv',y);
 
 
 printf("===========Processing h1.bias===========\n")
