@@ -222,8 +222,8 @@ fi
 done
 
 echo Finished at `date`
-#echo Exit by LJS
-#exit 1 
+echo Exit by LJS
+exit 1 
 
 echo Doing more decoding...
 #lm_list=`ls exp_deeplearn/spn_tri4a | grep "decode_eval2000_" | sed -e 's:decode_eval2000_::'`
