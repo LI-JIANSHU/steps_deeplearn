@@ -1,20 +1,8 @@
 #!/bin/bash
 
-# Apache 2.0
-# This script builds CNN hybrid systems over the filterbank features. It is
-# to be run after run.sh. Before running this, you should already build the 
-# initial GMM model. This script requires a GPU, and  also the "pdnn" tool-
-# kit to train the CNN. The input filterbank  features are  with  mean  and
-# variance normalization. We are applying 2D convolution (time x frequency).
-# You can easily switch to 1D convolution (only on frequency) by redefining
-# the CNN architecture.
-
-# For more informaiton regarding the recipes and results, visit our webiste
-# http://www.cs.cmu.edu/~ymiao/kaldipdnn
-
 working_dir=exp_deeplearn/spn_tri4a_110h
 #working_dir=exp_deeplearn/spn_tri4b
-delete_pfile=false # whether to delete pfiles after CNN training
+delete_pfile=false # whether to delete pfiles after training
 deeplearn_path=$HOME/deepasr/deeplearn/dist/Release_CUDA/CUDA-Linux-x86/deeplearn
 export LD_LIBRARY_PATH=/usr/local/cuda-6.0/lib64:$LD_LIBRARY_PATH   # libraries (CUDA, boost, protobuf)
 gpu_mem_limit=4     # available GPU memory used for the dataset, in GB. Should be 1GB less than the total GPU memory
@@ -25,10 +13,7 @@ gmmdir=exp/tri4a
 # Specify the gpu device to be used
 gpu=gpu
 
-# Here are two critical variables. With the following default configuration,
-# we input speech frames as 29x29 images into CNN. Convolution over the time
-# axis is not intuitive. But in practice, this works well. If you change the
-# values, then you have to change the CNN definition accordingly.
+
 fbank_dim=29  # the dimension of fbanks on each frame
 splice_opts="--left-context=14 --right-context=14"  # splice of fbank frames over time
 
@@ -110,11 +95,11 @@ fi
 
 
 echo ---------------------------------------------------------------------
-echo "Creating CNN training and validation data (pfiles)"
+echo "Creating training and validation data (pfiles)"
 echo ---------------------------------------------------------------------
 # By default, inputs include 29 frames (+/-14) of 29-dimensional log-scale filter-banks,
 # so that we take each frame as an image.
-# if exp_pdnn_110h/cnn have finished, we can copy the files[] here to avoid re-run the code.
+
 
 if [ ! -f $working_dir/train.pfile.done ]; then
   steps_deeplearn/build_nnet_pfile.sh --cmd "$train_cmd" --every-nth-frame 1 --do-split false \
