@@ -2,8 +2,6 @@
 # Copyright 2013    Yajie Miao    Carnegie Mellon University
 # Apache 2.0
 
-# Generate the txt formatted fbank features. This is a workaround for Kaldi lacking  
-# the implementation of CNN activation.
 
 # Begin configuration section.  
 stage=1
